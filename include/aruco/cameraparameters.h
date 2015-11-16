@@ -29,6 +29,7 @@ or implied, of Rafael Muñoz Salinas.
 #define  _Aruco_CameraParameters_H
 #include "exports.h"
 #include <opencv2/core/core.hpp>
+#include <opencv2/calib3d.hpp>
 #include <string>
 using namespace std;
 namespace aruco

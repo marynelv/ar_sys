@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ar_sys)
 
+find_package(OpenCV REQUIRED) # This must be OpenCV3!
+
 find_package(catkin REQUIRED COMPONENTS
 	cv_bridge
 	dynamic_reconfigure
@@ -30,6 +32,11 @@ catkin_package(
 include_directories(
 	include
 	${catkin_INCLUDE_DIRS}
+	${OPENCV_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${OPENCV_LIBRARY_DIRS}
 )
 
 ## Declare a cpp library
@@ -44,21 +51,25 @@ add_library(aruco
 	src/aruco/ar_omp.cpp
 	src/aruco/subpixelcorner.cpp
 )
-target_link_libraries(aruco ${catkin_LIBRARIES})
+target_link_libraries(aruco ${catkin_LIBRARIES} ${OPENCV_LIBRARIES}  
+)
 
 add_executable(single_board src/single_board.cpp
 	src/utils.cpp)
 add_dependencies(single_board ${catkin_EXPORTED_TARGETS})
-target_link_libraries(single_board aruco ${catkin_LIBRARIES})
+target_link_libraries(single_board aruco ${catkin_LIBRARIES}   ${OPENCV_LIBRARIES}  
+)
 
 add_executable(multi_boards src/multi_boards.cpp
 	src/utils.cpp)
 add_dependencies(multi_boards ${catkin_EXPORTED_TARGETS})
-target_link_libraries(multi_boards aruco ${catkin_LIBRARIES})
+target_link_libraries(multi_boards aruco ${catkin_LIBRARIES}   ${OPENCV_LIBRARIES}  
+)
 
 add_executable(system_viewer src/system_viewer.cpp)
 add_dependencies(system_viewer ${catkin_EXPORTED_TARGETS})
-target_link_libraries(system_viewer ${catkin_LIBRARIES})
+target_link_libraries(system_viewer ${catkin_LIBRARIES}   ${OPENCV_LIBRARIES}  
+)
 
 install(DIRECTORY include/
 	DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}

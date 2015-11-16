@@ -31,6 +31,7 @@ or implied, of Rafael Muñoz Salinas.
 #include <cstdio>
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 using namespace cv;
 namespace aruco {
 /**
@@ -241,7 +242,7 @@ void Marker::draw(Mat &in, Scalar color, int lineWidth ,bool writeId)const
         }
         cent.x/=4.;
         cent.y/=4.;
-        putText(in,cad, cent,FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(255-color[0],255-color[1],255-color[2],255),2);
+	cv::putText(in,cad, cent,FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(255-color[0],255-color[1],255-color[2],255),2);
     }
 }
 

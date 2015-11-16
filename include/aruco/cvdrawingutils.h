@@ -29,6 +29,7 @@ or implied, of Rafael Muñoz Salinas.
 #define _ArUco_DrawUtils_H_
 #include "exports.h"
 #include "aruco.h"
+#include <opencv2/highgui.hpp>
 namespace aruco
 {
   /**\brief A set of functions to draw in opencv images
