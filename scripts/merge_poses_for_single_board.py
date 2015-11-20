@@ -1,10 +1,10 @@
 #!/usr/bin/python
-# Script to merge poses for single AR board
+# Script to merge poses from multiple cameras for a single AR board
 #
 # Run as:
-#   $ rosrun ar_sys merge_poses_for_single_board.py _poses:="pose_topic_1, pose_topic_2, ..." _output_pose:=<output topic>
+#   $ rosrun ar_sys merge_poses_for_single_board.py _poses:="pose_topic_1, pose_topic_2, ..." _output_pose:=<output topic> _output_frame:=<output frame>
 #
-# Author: Marynel Vazquez
+# Author: Marynel Vazquez (marynel@cmu.edu)
 # Creation Date: 11/19/15
 
 import threading
@@ -67,7 +67,6 @@ class MergePoses:
                 rospy.loginfo("Got static transform for %s" % pose_msg.header.frame_id)
 
         # transform pose
-
         framemat = self.tl.fromTranslationRotation(position, quaternion)
 
         posemat = self.tl.fromTranslationRotation([pose_msg.pose.position.x,
@@ -88,9 +87,6 @@ class MergePoses:
         tmp_pose.header.frame_id = self.output_frame
         tmp_pose.pose = Pose(Point(*xyz),Quaternion(*quat))
         
-        # self.tl.waitForTransform(self.output_frame, pose_msg.header.frame_id, rospy.Time(), rospy.Duration(1.0))
-        # tmp_pose = self.tl.transformPose(self.output_frame,pose_msg)
-
         tmp_angles = euler_from_quaternion([tmp_pose.pose.orientation.x,
                                             tmp_pose.pose.orientation.y,
                                             tmp_pose.pose.orientation.z,
@@ -101,10 +97,7 @@ class MergePoses:
         
         if self.avg_pose == None or (pose_msg.header.stamp - self.avg_pose.header.stamp).to_sec() > 0.5:
             self.avg_pose = tmp_pose
-        else:
-
-            print (pose_msg.header.stamp - self.avg_pose.header.stamp).to_sec()
-            
+        else:            
             self.avg_pose.header.stamp = pose_msg.header.stamp
             a = 0.7
             b = 0.3
